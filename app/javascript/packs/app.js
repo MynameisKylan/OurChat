@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import consumer from "../channels/consumer";
 import axios from "axios";
 
 import ConversationForm from "../components/conversationForm";
+import Subscription from "../components/subscription";
+import Messenger from '../components/messenger'
 
 const app = () => {
   const [conversations, _setConversations] = useState([]);
+  const [activeConversation, setActiveConversation] = useState(null);
 
   // Need to use a Ref to store current value of conversations
   // so that handleReceivedConversation() can access current value of conversations
@@ -21,7 +24,16 @@ const app = () => {
     setConversations([...conversationsRef.current, data]);
   };
 
-  // On app load, fetch conversations from API and create subscriptions to each conversation
+  const handleReceivedMessage = (message) => {
+    const new_conversations = [...conversations];
+    const conversation = new_conversations.find(
+      (conv) => conv.id === message.conversation_id
+    );
+    conversation.messages = [...conversation.messages, message];
+    setConversations(new_conversations);
+  };
+
+  // On app load, fetch conversations from API and create subscription to conversation channel
   useEffect(() => {
     axios
       .get("/conversations")
@@ -33,9 +45,6 @@ const app = () => {
           received(resp) {
             handleReceivedConversation(resp);
           },
-          connected() {
-            console.log("CONNECTED TO APP SOCKET");
-          },
         });
       });
     // Disconnect on unmount
@@ -46,10 +55,17 @@ const app = () => {
 
   return (
     <div>
-      <ConversationForm />
       {conversations.map((conv) => (
-        <p>{conv.title}</p>
+        <Fragment key={conv.id}>
+          <Subscription
+            conversation_id={conv.id}
+            handleReceivedMessage={handleReceivedMessage}
+          />
+          <button onClick={() => setActiveConversation(conv)}>{conv.title}</button>
+        </Fragment>
       ))}
+      <ConversationForm />
+      {activeConversation && <Messenger conversation={activeConversation} />}
     </div>
   );
 };
