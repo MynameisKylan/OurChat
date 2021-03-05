@@ -1,6 +1,8 @@
 class ConversationsChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "conversation_#{params[:conversation_id]}"
+    # This channel name used in conversations_controller.rb
+    # to broadcast to right channel
+    stream_from "conversations_channel"
   end
 
   def unsubscribed
