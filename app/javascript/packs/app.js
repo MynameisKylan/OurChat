@@ -10,6 +10,7 @@ const app = () => {
     axios
       .get("/conversations")
       .then((resp) => {
+        console.log(resp)
         setConversations(resp.data);
       })
       .then(() => {
