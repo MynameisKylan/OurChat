@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include ::ActionController::Cookies
 
+  skip_forgery_protection
   before_action :authorized
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -9,14 +10,13 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    User.find(decoded_token['user_id'])
+    User.find(decoded_token[0]['user_id'])
   end
 
   # Return format: [{"user_id"=>X}, {"alg"=>"XXXX"}]
   def decoded_token
-    auth_header = request.authorization
-    if auth_header
-      token = auth_header
+    if cookies.signed[:jwt]
+      token = cookies.signed[:jwt]
       begin
         JWT.decode(token, ENV['jwt_secret'], true, algorithm: 'HS256')
       rescue JWT::DecodeError

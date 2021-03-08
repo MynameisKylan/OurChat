@@ -1,6 +1,4 @@
 class ConversationsController < ApplicationController
-  # skip csrf token authentication
-  skip_before_action :verify_authenticity_token
   def index
     conversations = Conversation.all
     render json: conversations, include: [:messages] #ConversationSerializer.new(conversations).serializable_hash.to_json

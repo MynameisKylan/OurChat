@@ -25,6 +25,7 @@ gem 'redis', '~> 4.0'
 gem 'jsonapi-serializer'
 gem 'devise'
 gem 'jwt'
+gem 'figaro'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

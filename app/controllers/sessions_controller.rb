@@ -3,20 +3,22 @@ class SessionsController < Devise::SessionsController
   respond_to :json
 
   # Rails looks in same namespace for serializers (ex: serializers/session_serializer.rb)
-  def respond_with(resource, opts = {})
+  def respond_with(resource, _opts = {})
     token = encode_token({ user_id: resource.id })
-    render json: { user: resource, token: token }
+    # Send httponly cookie with jwt - client requests cookie on login with {withCredentials: true}
+    cookies.signed[:jwt] = { value: token, httponly: true, expires: 2.hours.from_now }
+    render json: { user: resource }
   end
 
   # # Overwrite create to stop redirect
   def create
     self.resource = warden.authenticate(auth_options)
-    if self.resource
+    if resource
       sign_in(resource_name, resource)
       yield resource if block_given?
       respond_with resource
     else
-      render json: { error: "Incorrect Email or Password" }
+      render json: { error: 'Incorrect Email or Password' }
     end
   end
 end
