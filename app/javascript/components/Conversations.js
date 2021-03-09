@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import consumer from "../channels/consumer";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import ConversationForm from "../components/conversationForm";
 import Subscription from "../components/subscription";
@@ -9,6 +10,7 @@ import Messenger from "../components/messenger";
 const Conversations = () => {
   const [conversations, _setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
+  const history = useHistory();
 
   // Need to use a Ref to store current value of conversations
   // so that handleReceivedConversation() can access current value of conversations
@@ -36,8 +38,9 @@ const Conversations = () => {
   // On app load, fetch conversations from API and create subscription to conversation channel
   useEffect(() => {
     axios
-      .get("/conversations", {withCredentials: true})
+      .get("/conversations/get_all", { withCredentials: true })
       .then((resp) => {
+        console.log(resp);
         setConversations(resp.data);
       })
       .then(() => {
@@ -46,6 +49,11 @@ const Conversations = () => {
             handleReceivedConversation(resp);
           },
         });
+      })
+      .catch(() => {
+        // If not authenticated, remove loggedIn status, redirect to login page
+        localStorage.removeItem("loggedIn");
+        history.push("/login");
       });
     // Disconnect on unmount
     return () => {

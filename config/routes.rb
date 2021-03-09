@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
   root 'pages#home'
-  resources :conversations, only: %i[index create]
-  resources :messages, only: [:create]
 
   devise_for :users, skip: [:registrations], defaults: { format: :json },
                      controllers: { sessions: 'sessions', registrations: 'registrations' }
@@ -10,6 +8,11 @@ Rails.application.routes.draw do
     post '/users', to: 'registrations#create', as: :user_registration
   end
   resource :users, only: %i[show destroy]
+
+  resource :conversations, only: [:get_all, :create] do
+    get 'get_all', on: :member
+  end
+  resources :messages, only: [:create]
 
   get '*path', to: 'pages#home', via: :all
   mount ActionCable.server => '/cable'
