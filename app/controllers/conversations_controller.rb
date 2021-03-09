@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   def get_all
     conversations = current_user.conversations
-    render json: conversations, include: [:messages]
+    render json: ConversationSerializer.new(conversations, { include: [:messages] }).serializable_hash
   end
 
   def create
