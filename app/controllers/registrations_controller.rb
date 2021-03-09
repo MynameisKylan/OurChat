@@ -6,7 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
     token = encode_token({ user_id: resource.id })
     # Send httponly cookie with jwt - client requests cookie on login with {withCredentials: true}
     cookies.signed[:jwt] = { value: token, httponly: true, expires: 2.hours.from_now }
-    render json: { user: resource }
+    render json: {user: resource.username}
   end
 
   # POST /resource

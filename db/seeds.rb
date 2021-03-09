@@ -12,6 +12,6 @@ users = User.create([{ username: 'dummy', password: 'password', password_confirm
 
 conversations = Conversation.create([{ title: 'number 1' }, { title: 'number 2' }])
 
-memberships = Membership.create([{user_id: 1, conversation_id: 1}, {user_id: 2, conversation_id: 1}])
+memberships = Membership.create([{user_id: 1, conversation_id: 1}, {user_id: 1, conversation_id: 2}, {user_id: 2, conversation_id: 1}])
 
-messages = Message.create([{ conversation_id: 1, text: 'hello to 1', user_id: 1 }, { conversation_id: 2, text: 'hello to 2', user_id: 2 }])
+messages = Message.create([{ conversation_id: 1, text: 'hello to 1', user_id: 1 }, { conversation_id: 1, text: 'hello again', user_id: 1 }, { conversation_id: 2, text: 'hello to 2', user_id: 2 }])
