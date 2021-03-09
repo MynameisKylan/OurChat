@@ -11,16 +11,18 @@ const messenger = ({ conversation }) => {
       .post("/messages", {
         message: { text: message, conversation_id: conversation.id },
       })
-      .then((resp) => {
+      .then(() => {
         setMessage("");
       });
   };
 
   return (
     <div>
-      <h2>{conversation.title}</h2>
-      {conversation.messages.map((msg) => (
-        <p>{msg.text}</p>
+      <h2>{conversation.attributes.title}</h2>
+      {conversation.attributes.messages.data.map((msg) => (
+        <p key={msg.id}>
+          {msg.attributes.author}: {msg.attributes.text}
+        </p>
       ))}
       <form>
         <input

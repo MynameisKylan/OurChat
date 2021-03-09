@@ -41,7 +41,7 @@ const Conversations = () => {
       .get("/conversations/get_all", { withCredentials: true })
       .then((resp) => {
         console.log(resp);
-        setConversations(resp.data);
+        setConversations(resp.data.data);
       })
       .then(() => {
         consumer.subscriptions.create("ConversationsChannel", {
@@ -69,7 +69,7 @@ const Conversations = () => {
             handleReceivedMessage={handleReceivedMessage}
           />
           <button onClick={() => setActiveConversation(conv)}>
-            {conv.title}
+            {conv.attributes.title}
           </button>
         </Fragment>
       ))}
