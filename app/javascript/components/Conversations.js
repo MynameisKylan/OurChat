@@ -29,9 +29,9 @@ const Conversations = () => {
   const handleReceivedMessage = (message) => {
     const new_conversations = [...conversations];
     const conversation = new_conversations.find(
-      (conv) => conv.id === message.conversation_id
+      (conv) => parseInt(conv.id) === message.data.attributes.conversation_id
     );
-    conversation.messages = [...conversation.messages, message];
+    conversation.attributes.messages.data = [...conversation.attributes.messages.data, message.data];
     setConversations(new_conversations);
   };
 

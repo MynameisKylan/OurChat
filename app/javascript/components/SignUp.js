@@ -27,8 +27,7 @@ const SignUp = (props) => {
       })
       .then((resp) => {
         if (resp.data.user) {
-          localStorage.setItem('loggedIn', true);
-
+          localStorage.setItem("currentUser", resp.data.user);
           // Redirects to home after retrieving token
           history.push("/");
         } else {

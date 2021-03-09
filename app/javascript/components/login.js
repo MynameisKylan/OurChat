@@ -23,8 +23,9 @@ const Login = (props) => {
         user: user,
       })
       .then((resp) => {
+        console.log(resp)
         if (resp.data.user) {
-          localStorage.setItem("loggedIn", true);
+          localStorage.setItem("currentUser", resp.data.user);
           history.push("/");
         } else {
           setErrorMessage("Invalid email or password");
