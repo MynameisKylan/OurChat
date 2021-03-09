@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import Login from "../components/login";
 import SignUp from "../components/SignUp";
 import Home from "../components/Home";
-import Conversations from '../components/Conversations';
+import Conversations from "../components/Conversations";
 
 const app = () => {
   // https://stackoverflow.com/questions/43164554/how-to-implement-authenticated-routes-in-react-router-4
@@ -31,15 +31,35 @@ const app = () => {
         exact
         path="/"
         render={(props) =>
-          localStorage.getItem("loggedIn") ? (
-            <Redirect to={{pathname: '/conversations'}} {...props} />
+          localStorage.getItem("currentUser") ? (
+            <Redirect to={{ pathname: "/conversations" }} {...props} />
           ) : (
             <Home />
           )
         }
       />
-      <Route exact path="/signup" render={(props) => <SignUp {...props} />} />
-      <Route exact path="/login" render={(props) => <Login {...props} />} />
+      <Route
+        exact
+        path="/signup"
+        render={(props) =>
+          localStorage.getItem("currentUser") ? (
+            <Redirect to={{ pathname: "/conversations" }} {...props} />
+          ) : (
+            <SignUp />
+          )
+        }
+      />
+      <Route
+        exact
+        path="/login"
+        render={(props) =>
+          localStorage.getItem("currentUser") ? (
+            <Redirect to={{ pathname: "/conversations" }} {...props} />
+          ) : (
+            <Login />
+          )
+        }
+      />
       <PrivateRoute path="/conversations" component={Conversations} />
     </Switch>
   );
