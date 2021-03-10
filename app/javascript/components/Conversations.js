@@ -2,10 +2,55 @@ import React, { Fragment, useState, useEffect, useRef } from "react";
 import consumer from "../channels/consumer";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
 
 import ConversationForm from "../components/conversationForm";
 import Subscription from "../components/subscription";
 import Messenger from "../components/messenger";
+
+const ConversationsWrapper = styled.div`
+  display: flex;
+`;
+
+const ConversationsIndex = styled.div`
+  width: 250px;
+  padding-right: 1em;
+  height: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+    width: 15px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 10px grey;
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #b30000;
+  }
+`;
+
+const ConversationButton = styled.button`
+  width: 100%;
+`;
+
+const Timestamp = styled.span`
+  font-size: 0.85em;
+  opacity: 0.8;
+`;
 
 const Conversations = () => {
   const [conversations, _setConversations] = useState([]);
@@ -31,7 +76,10 @@ const Conversations = () => {
     const conversation = new_conversations.find(
       (conv) => parseInt(conv.id) === message.data.attributes.conversation_id
     );
-    conversation.attributes.messages.data = [...conversation.attributes.messages.data, message.data];
+    conversation.attributes.messages.data = [
+      ...conversation.attributes.messages.data,
+      message.data,
+    ];
     setConversations(new_conversations);
   };
 
@@ -51,8 +99,8 @@ const Conversations = () => {
         });
       })
       .catch(() => {
-        // If not authenticated, remove loggedIn status, redirect to login page
-        localStorage.removeItem("loggedIn");
+        // If not authenticated, remove currentUser, redirect to login page
+        localStorage.removeItem("currentUser");
         history.push("/login");
       });
     // Disconnect on unmount
@@ -60,22 +108,39 @@ const Conversations = () => {
       consumer.disconnect();
     };
   }, []);
+
+  const conversationButtons = conversations.map((conv) => {
+    const messages = conv.attributes.messages.data;
+    const lastMessage = messages[messages.length - 1];
+    const timestamp = new Date(lastMessage.attributes.created_at);
+
+    return (
+      <Fragment key={conv.id}>
+        <Subscription
+          conversation_id={conv.id}
+          handleReceivedMessage={handleReceivedMessage}
+        />
+        <ConversationButton onClick={() => setActiveConversation(conv)}>
+          <h3>{conv.attributes.title}</h3>
+          <p>
+            {lastMessage.attributes.author}: {lastMessage.attributes.text} ·{" "}
+            <Timestamp>
+              {timestamp.getHours()}:{timestamp.getMinutes()}
+            </Timestamp>
+          </p>
+        </ConversationButton>
+      </Fragment>
+    );
+  });
+
   return (
-    <div>
-      {conversations.map((conv) => (
-        <Fragment key={conv.id}>
-          <Subscription
-            conversation_id={conv.id}
-            handleReceivedMessage={handleReceivedMessage}
-          />
-          <button onClick={() => setActiveConversation(conv)}>
-            {conv.attributes.title}
-          </button>
-        </Fragment>
-      ))}
-      <ConversationForm />
+    <ConversationsWrapper>
+      <ConversationsIndex>
+        <ConversationForm />
+        {conversationButtons}
+      </ConversationsIndex>
       {activeConversation && <Messenger conversation={activeConversation} />}
-    </div>
+    </ConversationsWrapper>
   );
 };
 
