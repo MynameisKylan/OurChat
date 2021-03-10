@@ -13,7 +13,7 @@ const app = () => {
       <Route
         {...rest}
         render={(props) =>
-          localStorage.getItem("loggedIn") ? (
+          localStorage.getItem("currentUser") ? (
             <Component {...props} />
           ) : (
             <Redirect
@@ -49,17 +49,7 @@ const app = () => {
           )
         }
       />
-      <Route
-        exact
-        path="/login"
-        render={(props) =>
-          localStorage.getItem("currentUser") ? (
-            <Redirect to={{ pathname: "/conversations" }} {...props} />
-          ) : (
-            <Login />
-          )
-        }
-      />
+      <Route exact path="/login" render={(props) => <Login {...props} />} />
       <PrivateRoute path="/conversations" component={Conversations} />
     </Switch>
   );

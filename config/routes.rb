@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   as :user do
     post '/users', to: 'registrations#create', as: :user_registration
   end
-  resource :users, only: %i[show destroy]
 
   resource :conversations, only: [:get_all, :create] do
     get 'get_all', on: :member
