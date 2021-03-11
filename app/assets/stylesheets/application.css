@@ -1,15 +1,79 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+html {
+  background: #242526;
+  color:white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 
+scrollbar styling 
+*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+/* 
+headings
+*/
+h1,
+h2,
+h3,
+h4 {
+  padding: 1em 0;
+}
+h1 {
+  font-size: 2.5em;
+}
+h2 {
+  font-size: 2em;
+}
+h3 {
+  font-size: 1.5em;
+}
+h4 {
+  font-size:1.2em;
+  padding: 0.3em;
+}
+
+p {
+  padding: 0.5em 0;
+}
+
+button {
+  background:inherit;
+  color:inherit;
+  border-radius: 5px;
+  border:none;
+  padding: 0.6em;
+}
+
+button:hover {
+  background: rgba(255,255,255,0.1);
+  transition:0.2s ease;
+  cursor:pointer;
+}
+
+*:focus {
+  outline:none;
+  background: rgba(255,255,255,0.1);
+}
+
+input {
+  padding: 0.6em;
+  border-radius: 8px;
+  border:none;
+  background: rgba(255,255,255,0.1);
+  color:white;
+}
