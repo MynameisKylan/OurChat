@@ -11,6 +11,7 @@ import Messenger from "../components/messenger";
 const ConversationsWrapper = styled.div`
   display: flex;
   height: 100vh;
+  flex-direction: column;
 
   @media (max-width: 650px) {
     flex-direction: column;
@@ -51,11 +52,16 @@ const Timestamp = styled.span`
 
 const MenuButton = styled.button`
   font-size: 2em;
-  display: ${props => props.visible ? 'block' : 'none'}
+  display: none;
+
+  @media (max-width: 650px) {
+    display: ${(props) => (props.visible ? "block" : "none")};
+  }
 `;
 
 const Header = styled.div`
-  display: none;
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
   h3 {
     padding: 1em;
@@ -151,8 +157,7 @@ const Conversations = () => {
       .then((resp) => {
         console.log(resp);
         setConversations(resp.data.data);
-      })
-      .then(() => {
+
         consumer.subscriptions.create(
           { channel: "ConversationsChannel", username: currentUser },
           {
@@ -161,6 +166,11 @@ const Conversations = () => {
             },
           }
         );
+
+        const firstConversation = resp.data.data[0]
+        if (firstConversation) {
+          setActiveConversation(firstConversation);
+        }
       })
       .catch(() => {
         // If not authenticated, remove currentUser, redirect to login page
@@ -185,7 +195,7 @@ const Conversations = () => {
     setConversations(newConversations);
 
     // Show selected conversation if below width breakpoint
-    setShowConversation(true)
+    setShowConversation(true);
   };
 
   const toggleMenu = () => {
@@ -247,20 +257,22 @@ const Conversations = () => {
           <i className="fas fa-bars"></i>
         </MenuButton>
       </Header>
-      <ConversationsIndex visible={!showConversation}>
-        <ConversationForm />
-        {conversationButtons}
-      </ConversationsIndex>
-      {activeConversation && (
-        <Chatbox visible={showConversation}>
-          <Messenger
-            id={activeConversation.id}
-            messages={activeConversation.attributes.messages}
-            title={activeConversation.attributes.title}
-            usernames={activeConversation.attributes.usernames}
-          />
-        </Chatbox>
-      )}
+      <div style={{ display: "flex", flex: 1 }}>
+        <ConversationsIndex visible={!showConversation}>
+          <ConversationForm />
+          {conversationButtons}
+        </ConversationsIndex>
+        {activeConversation && (
+          <Chatbox visible={showConversation}>
+            <Messenger
+              id={activeConversation.id}
+              messages={activeConversation.attributes.messages}
+              title={activeConversation.attributes.title}
+              usernames={activeConversation.attributes.usernames}
+            />
+          </Chatbox>
+        )}
+      </div>
     </ConversationsWrapper>
   );
 };
