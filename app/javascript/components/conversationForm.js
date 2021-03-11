@@ -10,6 +10,7 @@ const conversationForm = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
+    setTitle('');
 
     axios
       .post("/conversations", { conversation: { title: title } });

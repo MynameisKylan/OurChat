@@ -64,7 +64,7 @@ const Conversations = () => {
       setConversations([...conversationsRef.current, data]);
     } else {
       // Update existing conversation
-      console.log('updating existing conversation')
+      console.log("updating existing conversation");
       let newConversations = [...conversationsRef.current];
       newConversations[index] = data;
       setConversations(newConversations);
@@ -73,14 +73,17 @@ const Conversations = () => {
 
   // Callback when conversations is updated
   useEffect(() => {
-    console.log('callback after conversations updated')
+    console.log("callback after conversations updated");
     if (activeConversation) {
-      console.log('setting active conversation')
-      const conversation = conversations.find((conv) => conv.id === activeConversation.id)
-      setActiveConversation(conversation)
+      console.log("setting active conversation");
+      const conversation = conversations.find(
+        (conv) => conv.id === activeConversation.id
+      );
+      setActiveConversation(conversation);
     }
-  }, [conversations])
+  }, [conversations]);
 
+  // Update conversation with received message
   const handleReceivedMessage = (message) => {
     const new_conversations = [...conversationsRef.current];
     const conversation = new_conversations.find(
@@ -90,6 +93,11 @@ const Conversations = () => {
       ...conversation.attributes.messages.data,
       message.data,
     ];
+
+    if (!activeConversation || conversation.id !== activeConversation.id) {
+      conversation.unread = true;
+    }
+
     setConversations(new_conversations);
   };
 
@@ -122,6 +130,18 @@ const Conversations = () => {
     };
   }, []);
 
+  const handleConversationClick = (conv) => {
+    setActiveConversation(conv)
+
+    // Clear unread status
+    let newConv = {...conv}
+    newConv.unread = false
+    let newConversations = [...conversations]
+    const index = newConversations.findIndex((c) => c.id === newConv.id)
+    newConversations[index] = newConv
+    setConversations(newConversations)
+  }
+
   const conversationButtons = conversations.map((conv) => {
     const messages = conv.attributes.messages.data;
     const lastMessage = messages[messages.length - 1];
@@ -141,15 +161,18 @@ const Conversations = () => {
           conversation_id={conv.id}
           handleReceivedMessage={handleReceivedMessage}
         />
-        <ConversationButton onClick={() => setActiveConversation(conv)}>
+        <ConversationButton onClick={() => handleConversationClick(conv)}>
           <h4>{conv.attributes.title}</h4>
           {lastMessage !== undefined && (
-            <p>
-              {author}: {lastMessage.attributes.text.slice(0, 50)}... ·{" "}
-              <Timestamp>
-                {timestamp.getHours()}:{timestamp.getMinutes()}
-              </Timestamp>
-            </p>
+            <div style={{display:'flex'}}>
+              <p  style={{flex:1}}>
+                {author}: {lastMessage.attributes.text.slice(0, 50)}... ·{" "}
+                <Timestamp>
+                  {timestamp.getHours()}:{timestamp.getMinutes()}
+                </Timestamp>
+              </p>
+              {conv.unread && <p style={{marginLeft: 0.5 + 'em', position: 'relative', top:-14 + 'px'}}><i className="fas fa-circle"></i></p>}
+            </div>
           )}
         </ConversationButton>
       </Fragment>
