@@ -10,12 +10,17 @@ import Messenger from "../components/messenger";
 
 const ConversationsWrapper = styled.div`
   display: flex;
+  height: 100vh;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
 
 const ConversationsIndex = styled.div`
   width: 250px;
   padding: 1em;
-  height: 100vh;
+  height: 100%;
 
   overflow-y: scroll;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -23,6 +28,12 @@ const ConversationsIndex = styled.div`
 
   &::-webkit-scrollbar {
     display: none; /* Safari and Chrome */
+  }
+
+  @media (max-width: 650px) {
+    flex: 1;
+    display: ${(props) => (props.visible ? "block" : "none")};
+    width: 100%;
   }
 `;
 
@@ -38,10 +49,42 @@ const Timestamp = styled.span`
   opacity: 0.8;
 `;
 
+const MenuButton = styled.button`
+  font-size: 2em;
+  display: ${props => props.visible ? 'block' : 'none'}
+`;
+
+const Header = styled.div`
+  display: none;
+
+  h3 {
+    padding: 1em;
+  }
+
+  @media (max-width: 650px) {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+
+const Chatbox = styled.div`
+  height: 100%;
+  flex: 1;
+  padding: 0 1em;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 650px) {
+    display: ${(props) => (props.visible ? "inherit" : "none")};
+  }
+`;
+
 const Conversations = () => {
   const [conversations, _setConversations] = useState([]);
   const [activeConversation, setActiveConversation] = useState(null);
   const [currentUser] = useState(localStorage.getItem("currentUser"));
+  const [showConversation, setShowConversation] = useState(false);
   const history = useHistory();
 
   // Need to use a Ref to store current value of conversations
@@ -131,16 +174,23 @@ const Conversations = () => {
   }, []);
 
   const handleConversationClick = (conv) => {
-    setActiveConversation(conv)
+    setActiveConversation(conv);
 
     // Clear unread status
-    let newConv = {...conv}
-    newConv.unread = false
-    let newConversations = [...conversations]
-    const index = newConversations.findIndex((c) => c.id === newConv.id)
-    newConversations[index] = newConv
-    setConversations(newConversations)
-  }
+    let newConv = { ...conv };
+    newConv.unread = false;
+    let newConversations = [...conversations];
+    const index = newConversations.findIndex((c) => c.id === newConv.id);
+    newConversations[index] = newConv;
+    setConversations(newConversations);
+
+    // Show selected conversation if below width breakpoint
+    setShowConversation(true)
+  };
+
+  const toggleMenu = () => {
+    setShowConversation(!showConversation);
+  };
 
   const conversationButtons = conversations.map((conv) => {
     const messages = conv.attributes.messages.data;
@@ -164,14 +214,24 @@ const Conversations = () => {
         <ConversationButton onClick={() => handleConversationClick(conv)}>
           <h4>{conv.attributes.title}</h4>
           {lastMessage !== undefined && (
-            <div style={{display:'flex'}}>
-              <p  style={{flex:1}}>
+            <div style={{ display: "flex" }}>
+              <p style={{ flex: 1 }}>
                 {author}: {lastMessage.attributes.text.slice(0, 50)}... ·{" "}
                 <Timestamp>
                   {timestamp.getHours()}:{timestamp.getMinutes()}
                 </Timestamp>
               </p>
-              {conv.unread && <p style={{marginLeft: 0.5 + 'em', position: 'relative', top:-14 + 'px'}}><i className="fas fa-circle"></i></p>}
+              {conv.unread && (
+                <p
+                  style={{
+                    marginLeft: 0.5 + "em",
+                    position: "relative",
+                    top: -14 + "px",
+                  }}
+                >
+                  <i className="fas fa-circle"></i>
+                </p>
+              )}
             </div>
           )}
         </ConversationButton>
@@ -181,17 +241,25 @@ const Conversations = () => {
 
   return (
     <ConversationsWrapper>
-      <ConversationsIndex>
+      <Header>
+        <h3>Chats</h3>
+        <MenuButton visible={showConversation} onClick={toggleMenu}>
+          <i className="fas fa-bars"></i>
+        </MenuButton>
+      </Header>
+      <ConversationsIndex visible={!showConversation}>
         <ConversationForm />
         {conversationButtons}
       </ConversationsIndex>
       {activeConversation && (
-        <Messenger
-          id={activeConversation.id}
-          messages={activeConversation.attributes.messages}
-          title={activeConversation.attributes.title}
-          usernames={activeConversation.attributes.usernames}
-        />
+        <Chatbox visible={showConversation}>
+          <Messenger
+            id={activeConversation.id}
+            messages={activeConversation.attributes.messages}
+            title={activeConversation.attributes.title}
+            usernames={activeConversation.attributes.usernames}
+          />
+        </Chatbox>
       )}
     </ConversationsWrapper>
   );

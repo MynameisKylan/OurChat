@@ -2,15 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-const Chatbox = styled.div`
-  height: 100vh;
-  flex: 1;
-  padding: 0 1em;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-`;
+
 
 const MessageBox = styled.div`
-  height: 80%;
+  flex: 1;
   display: flex;
   flex-direction: column-reverse;
   overflow: auto;
@@ -41,11 +36,11 @@ const messenger = ({ id, title, messages, usernames }) => {
   const [message, setMessage] = useState("");
   const [currentUser] = useState(localStorage.getItem("currentUser"));
   const [userToAdd, setUserToAdd] = useState("");
-  const [members, setMembers] = useState(usernames)
+  const [members, setMembers] = useState(usernames);
 
   useEffect(() => {
-    setMembers(usernames)
-  }, [usernames])
+    setMembers(usernames);
+  }, [usernames]);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -74,10 +69,10 @@ const messenger = ({ id, title, messages, usernames }) => {
   };
 
   return (
-    <Chatbox>
-      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+    <>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h2>{title}</h2>
-        <p>Members: {members.join(', ')}</p>
+        <p>Members: {members.join(", ")}</p>
       </div>
       <form>
         <input
@@ -112,7 +107,7 @@ const messenger = ({ id, title, messages, usernames }) => {
           <i className="fas fa-paper-plane"></i>
         </button>
       </ChatForm>
-    </Chatbox>
+    </>
   );
 };
 

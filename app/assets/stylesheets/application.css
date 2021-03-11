@@ -1,6 +1,7 @@
 html {
   background: #242526;
   color:white;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 * {
@@ -76,4 +77,8 @@ input {
   border:none;
   background: rgba(255,255,255,0.1);
   color:white;
+}
+
+form {
+  padding: 0.5em 0;
 }
