@@ -1,8 +1,8 @@
 class ConversationsChannel < ApplicationCable::Channel
   def subscribed
-    # This channel name used in conversations_controller.rb
-    # to broadcast to right channel
-    stream_from "conversations_channel"
+    user = User.find_by(username: params[:username])
+    # https://stackoverflow.com/questions/43941025/send-actioncable-to-particular-user
+    stream_for user
   end
 
   def unsubscribed

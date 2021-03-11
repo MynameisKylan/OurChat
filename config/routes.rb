@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     get 'get_all', on: :member
   end
   resources :messages, only: [:create]
+  resources :memberships, only: [:create]
 
   get '*path', to: 'pages#home', via: :all
   mount ActionCable.server => '/cable'

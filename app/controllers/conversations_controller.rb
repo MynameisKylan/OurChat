@@ -7,14 +7,11 @@ class ConversationsController < ApplicationController
   def create
     conversation = Conversation.new(conversation_params)
     if conversation.save
-      # Create memberships for each member
-      conversations_params[:usernames].each do |username|
-        user = User.find_by(username: username)
-        Membership.create(user_id: user.id, conversation_id: conversation.id)
-      end
+      # Create membership for creating member
+      Membership.create(conversation_id: conversation.id, user_id: current_user.id)
 
       # Broadcast new conversation to channel name defined in conversations_channel.rb
-      ActionCable.server.broadcast('conversations_channel', conversation)
+      ConversationsChannel.broadcast_to(current_user, ConversationSerializer.new(conversation).serializable_hash)
       head :ok
     end
   end
@@ -22,6 +19,6 @@ class ConversationsController < ApplicationController
   private
 
   def conversation_params
-    params.require(:conversation).permit(:title, :usernames)
+    params.require(:conversation).permit(:title)
   end
 end
