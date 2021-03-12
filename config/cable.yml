@@ -6,5 +6,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: redis://redistogo:342a20f21b17603beb881debd73e3718@tetra.redistogo.com:9696/
   channel_prefix: chatroom_production
