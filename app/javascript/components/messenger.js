@@ -64,7 +64,6 @@ const messenger = ({ id, title, messages, usernames }) => {
         membership: { conversation_id: id, username: userToAdd },
       })
       .then((resp) => {
-        console.log(resp);
       });
   };
 

@@ -24,7 +24,6 @@ const Login = (props) => {
         user: user,
       })
       .then((resp) => {
-        console.log(resp)
         if (resp.data.user) {
           localStorage.setItem("currentUser", resp.data.user);
           history.push("/");

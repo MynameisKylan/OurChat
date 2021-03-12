@@ -6,11 +6,7 @@ const subscription = ({ conversation_id, handleReceivedMessage }) => {
   useEffect(() => {
     consumer.subscriptions.create({channel: "MessagesChannel", conversation_id: conversation_id, username: localStorage.getItem('currentUser')}, {
       received(data) {
-        console.log(data)
         handleReceivedMessage(data)
-      },
-      connected() {
-        console.log(`connected to conversation id ${conversation_id}`)
       }
     })
   }, [])

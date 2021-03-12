@@ -117,7 +117,6 @@ const Conversations = () => {
       setConversations([...conversationsRef.current, data]);
     } else {
       // Update existing conversation
-      console.log("updating existing conversation");
       let newConversations = [...conversationsRef.current];
       newConversations[index] = data;
       setConversations(newConversations);
@@ -126,9 +125,7 @@ const Conversations = () => {
 
   // Callback when conversations is updated
   useEffect(() => {
-    console.log("callback after conversations updated");
     if (activeConversation) {
-      console.log("setting active conversation");
       const conversation = conversations.find(
         (conv) => conv.id === activeConversation.id
       );
@@ -159,7 +156,6 @@ const Conversations = () => {
     axios
       .get("/conversations/get_all", { withCredentials: true })
       .then((resp) => {
-        console.log(resp);
         setConversations(resp.data.data);
 
         consumer.subscriptions.create(
