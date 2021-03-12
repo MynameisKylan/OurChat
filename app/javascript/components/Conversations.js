@@ -215,8 +215,12 @@ const Conversations = () => {
     let timestamp, author, hours, minutes;
     if (lastMessage !== undefined) {
       timestamp = new Date(lastMessage.attributes.created_at);
+      console.log(timestamp)
       hours = timestamp.getHours();
       minutes = timestamp.getMinutes();
+      console.log(hours)
+      console.log(minutes)
+      console.log('###############')
 
       // Add leading zero
       minutes = parseInt(minutes) < 10 ? '0' + minutes : minutes
