@@ -62,14 +62,10 @@ const MenuButton = styled.button`
 const Header = styled.div`
   display: flex;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: space-between;
 
   h3 {
     padding: 1em;
-  }
-
-  @media (max-width: 650px) {
-    display: flex;
-    justify-content: space-between;
   }
 `;
 
@@ -83,6 +79,14 @@ const Chatbox = styled.div`
 
   @media (max-width: 650px) {
     display: ${(props) => (props.visible ? "inherit" : "none")};
+  }
+`;
+
+const LogoutButton = styled.button`
+  font-size: 2em;
+
+  @media (max-width: 650px) {
+    display: ${(props) => (props.visible ? "block" : "none")};
   }
 `;
 
@@ -167,7 +171,7 @@ const Conversations = () => {
           }
         );
 
-        const firstConversation = resp.data.data[0]
+        const firstConversation = resp.data.data[0];
         if (firstConversation) {
           setActiveConversation(firstConversation);
         }
@@ -200,6 +204,11 @@ const Conversations = () => {
 
   const toggleMenu = () => {
     setShowConversation(!showConversation);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("currentUser");
+    history.push('/')
   };
 
   const conversationButtons = conversations.map((conv) => {
@@ -256,6 +265,9 @@ const Conversations = () => {
         <MenuButton visible={showConversation} onClick={toggleMenu}>
           <i className="fas fa-bars"></i>
         </MenuButton>
+        <LogoutButton visible={!showConversation} onClick={logout}>
+          <i className="fas fa-sign-out-alt"></i>
+        </LogoutButton>
       </Header>
       <div style={{ display: "flex", flex: 1 }}>
         <ConversationsIndex visible={!showConversation}>
