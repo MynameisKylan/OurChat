@@ -204,16 +204,18 @@ const Conversations = () => {
 
   const logout = () => {
     localStorage.removeItem("currentUser");
-    history.push('/')
+    history.push("/");
   };
 
   const conversationButtons = conversations.map((conv) => {
     const messages = conv.attributes.messages.data;
     const lastMessage = messages[messages.length - 1];
-    let timestamp;
-    let author;
+    let timestamp, author, hours, minutes;
     if (lastMessage !== undefined) {
       timestamp = new Date(lastMessage.attributes.created_at);
+      hours = timestamp.getHours();
+      minutes = timestamp.getMinutes();
+      minutes = parseInt(minutes) < 10 ? '0' + minutes : minutes
       author =
         lastMessage.attributes.author === currentUser
           ? "You"
@@ -233,7 +235,7 @@ const Conversations = () => {
               <p style={{ flex: 1 }}>
                 {author}: {lastMessage.attributes.text.slice(0, 50)}... ·{" "}
                 <Timestamp>
-                  {timestamp.getHours()}:{timestamp.getMinutes()}
+                  {hours}:{minutes}
                 </Timestamp>
               </p>
               {conv.unread && (
