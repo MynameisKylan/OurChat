@@ -82,3 +82,23 @@ input {
 form {
   padding: 0.5em 0;
 }
+
+.wrapper {
+  text-align: center;
+}
+
+.wrapper input {
+  margin: 0.5em;
+}
+
+.register-button {
+  padding: 1em;
+  margin: 1em;
+  background: rgba(255,255,255,0.1);
+  width: 193px;
+}
+
+.register-button:hover {
+  background:  rgba(255,255,255,0.2);
+  transition: 0.2s ease;
+}

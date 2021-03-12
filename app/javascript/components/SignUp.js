@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import _ from "lodash";
+import styled from 'styled-components'
 
 import Error from "./Error";
 
@@ -47,9 +48,9 @@ const SignUp = (props) => {
   }
 
   return (
-    <>
+    <div className='wrapper'>
       <div className="header">
-        <h1>Chat</h1>
+        <h1>OurChat</h1>
       </div>
       <div className="content-wrapper">
         <h2>Sign Up</h2>
@@ -91,7 +92,7 @@ const SignUp = (props) => {
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

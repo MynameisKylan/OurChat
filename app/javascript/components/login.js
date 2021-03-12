@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Error from "./Error";
+import styled from 'styled-components'
 
 const Login = (props) => {
   const [user, setUser] = useState({ email: "", password: "" });
@@ -35,9 +36,9 @@ const Login = (props) => {
   };
 
   return (
-    <>
+    <div className='wrapper'>
       <div className="header">
-        <h1>Chat</h1>
+        <h1>OurChat</h1>
       </div>
       <div className="content-wrapper">
         <h2>Login</h2>
@@ -64,7 +65,7 @@ const Login = (props) => {
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 
