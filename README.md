@@ -1,24 +1,11 @@
-# README
+# OurChat
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A messenger clone utilizing Rails' websockets framework - ActionCable. Users can create an account and create conversations with zero or more other users. Messaging is broadcast via the pub/sub model of websockets. Authentication is handled by [Devise](https://github.com/heartcombo/devise). Authorization is implemented with JSON web tokens and distributed via HTML-only cookies.
 
-Things you may want to cover:
+Front-End:
+- ReactJS
+- JSX
+- CSS
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Back-End:
+- Rails
