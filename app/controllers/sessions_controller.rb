@@ -6,8 +6,8 @@ class SessionsController < Devise::SessionsController
   def respond_with(resource, _opts = {})
     token = encode_token({ user_id: resource.id })
     # Send httponly cookie with jwt - client requests cookie on login with {withCredentials: true}
-    cookies.signed[:jwt] = { value: token, httponly: true, expires: 2.hours.from_now }
-    render json: {user: resource.username}
+    cookies.signed[:jwt] = { value: token, httponly: true, expires: 2.hours.from_now, same_site: 'Lax' }
+    render json: { user: resource.username }
   end
 
   # # Overwrite create to stop redirect
