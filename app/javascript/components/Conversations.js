@@ -267,7 +267,7 @@ const Conversations = () => {
           <i className="fas fa-sign-out-alt"></i>
         </LogoutButton>
       </Header>
-      <div style={{ display: "flex", flex: 1 }}>
+      <div style={{ display: "flex", flex: 1, height: 80 + '%' }}>
         <ConversationsIndex visible={!showConversation}>
           <ConversationForm />
           {conversationButtons}

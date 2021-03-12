@@ -2,20 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
-
-
 const MessageBox = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column-reverse;
-  overflow: auto;
+  overflow-y: scroll;
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0 1em;
 `;
 
 const Message = styled.p`
   margin: ${(props) =>
-    props.self ? "0.1em 0 0.1em auto" : "0.1em auto 0.1em 0"};
+    props.self ? "0.2em 0 0.2em auto" : "0.2em auto 0.2em 0"};
   width: fit-content;
   max-width: 80%;
   border-radius: 9px;
@@ -58,13 +56,10 @@ const messenger = ({ id, title, messages, usernames }) => {
     e.preventDefault();
     setUserToAdd("");
 
-    axios
-      .post("/memberships", {
-        withCredentials: true,
-        membership: { conversation_id: id, username: userToAdd },
-      })
-      .then((resp) => {
-      });
+    axios.post("/memberships", {
+      withCredentials: true,
+      membership: { conversation_id: id, username: userToAdd },
+    });
   };
 
   return (
