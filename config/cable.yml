@@ -6,5 +6,5 @@ test:
 
 production:
   adapter: redis
-  url: redis://redistogo:342a20f21b17603beb881debd73e3718@tetra.redistogo.com:9696/
+  url: redis://default:6c2aa67f5f1149fe7752158c82a78@fly-our-chat-redis.upstash.io
   channel_prefix: chatroom_production
