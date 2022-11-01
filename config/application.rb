@@ -35,5 +35,10 @@ module Chatroom
 
     # Enable cookies
     config.middleware.use ActionDispatch::Cookies
+
+    # session stuff for updating to rails 7 - from https://github.com/waiting-for-dev/devise-jwt/issues/235#issuecomment-1116864740
+    config.session_store :cookie_store, key: '_interslice_session'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
   end
 end
